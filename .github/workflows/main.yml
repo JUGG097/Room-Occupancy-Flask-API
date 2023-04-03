@@ -1,0 +1,48 @@
+name: Build & Deploy
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+ 
+jobs:
+
+  build_publish_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Docker Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Build the Docker Image
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/occupancy-api
+      - name: Docker push
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: docker push ${{ secrets.DOCKER_USER }}/occupancy-api:latest
+      
+
+  pull_run_docker_image:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: [build_publish_docker_image]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Deploy Django BE
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
+          key: ${{secrets.SSH_KEY}} # Private or Public key of the server
+          username: ${{secrets.SSH_USERNAME}} # User of server you want to ssh into
+          
+          ## Have to fix this there must be a better way
+          script: |
+            docker pull ${{ secrets.DOCKER_USER }}/occupancy-api:latest
+            docker stop occupancy-api
+            docker rm -f occupancy-api
+            docker run -d -p 7000:5000 --name occupancy-api ${{ secrets.DOCKER_USER }}/occupancy-api:latest
