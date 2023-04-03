@@ -33,7 +33,7 @@ jobs:
     needs: [build_publish_docker_image]
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Deploy Django BE
+      - name: Deploy Occupancy API
         uses: appleboy/ssh-action@v0.1.2
         with:
           host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
