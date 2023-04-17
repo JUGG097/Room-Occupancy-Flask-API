@@ -1,9 +1,11 @@
 from flask import Flask, request
+from flask_cors import CORS
 import json
 import joblib
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)
 
 model = joblib.load("models/rf_clf.joblib")
 
