@@ -1,4 +1,4 @@
-# Room Occupnacy Prediction API 
+# Room Occupancy Prediction API (consumed by room occupancy website [here](https://occupancy-adeoluwa.netlify.app/))
 
 API endpoint for a room occupancy machine learning model, capable of predicting the number of persons (`P.S limited for use in a small space where maximum occupancy is just 3 persons at a time`) in a room based on climate parameters such as CO2, Temperature, Sound, Motion Sensor readings. 
 
