@@ -18,7 +18,7 @@ def health_check():
 def occupancy_prediction():
     try:
         req_body = json.loads(request.data)
-        req_body["S5_CO2_Slope"] = 0
+        req_body["S5_CO2_Slope"] = 0.5
         # print(req_body)
         df_data = pd.DataFrame(req_body, index=[0])
         pred = model.predict(df_data)
