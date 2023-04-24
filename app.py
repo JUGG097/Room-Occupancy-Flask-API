@@ -3,11 +3,13 @@ from flask_cors import CORS
 import json
 import joblib
 import pandas as pd
+from modules import LIME_explain
 
 app = Flask(__name__)
 CORS(app)
 
 model = joblib.load("models/rf_clf.joblib")
+
 
 @app.route("/check", methods=["GET"])
 def health_check():
@@ -28,10 +30,15 @@ def occupancy_prediction():
             "S5_CO2": req_body["S5_CO2"],
             "S5_CO2_Slope": 0.5,
         }
-        
+
         df_data = pd.DataFrame(data, index=[0])
         pred = model.predict(df_data)
-        return {"success": True, "prediction": str(pred[0])}, 200
+        exp_output = LIME_explain.prediction_explainer(df_data, model, pred[0])
+        return {
+            "success": True,
+            "prediction": str(pred[0]),
+            "explanation": exp_output,
+        }, 200
     except:
         return {"success": False, "error": "Internal Server Error"}, 500
 
