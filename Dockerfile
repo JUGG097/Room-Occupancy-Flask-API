@@ -7,6 +7,8 @@ COPY requirements.txt app.py ./
 RUN pip install -r requirements.txt
 
 COPY models ./models/
+COPY data ./data/
+COPY modules ./modules/
 
 EXPOSE 7000
 # 7000:5000
