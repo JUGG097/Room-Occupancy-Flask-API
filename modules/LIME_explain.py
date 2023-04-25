@@ -4,14 +4,13 @@ from sklearn.model_selection import train_test_split
 from lime import lime_tabular
 
 
-def prediction_explainer(input_data, model, pred):
-    data = pd.read_csv("data/ALL_SET.csv")
+def prediction_explainer(data, input_data, model, pred):
 
     features = data.drop("Room_Occupancy_Count", axis=1)
     target = data["Room_Occupancy_Count"]
 
     X_train, X_test, y_train, y_test = train_test_split(
-        features, target, test_size=0.30, random_state=42
+        features, target, test_size=0.3, random_state=42
     )
 
     cat_features = [3, 4]
