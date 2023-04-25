@@ -22,9 +22,10 @@ BODY: {
   - "PIR": motion sensor readings (0 - no motion, 1 - motion detected),
   - "Day_Period": time of day (0 - morning, 1 - afternoon, 2 - evening),
   - "S5_CO2": CO2 readings in PPM
+  - "S5_CO2_Slope": Slope calculated by using previous CO2 readings (optional, arbitrary set to 0.5)
 
   }
 
-SUCCESS RESPONSE (200): {'success': true, 'prediction': [0 - 3]}
+SUCCESS RESPONSE (200): {'success': true, 'prediction': [0 - 3], 'explanation': [['Light', *****], ...]}
 
 ERROR RESPONSE (4**, 5**): {'success': false, 'error': '***********'}
