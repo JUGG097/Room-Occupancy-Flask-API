@@ -6,6 +6,7 @@ RUN apt-get update
 COPY requirements.txt app.py ./
 COPY models ./models/
 COPY modules ./modules/
+COPY exceptions ./exceptions/
 
 RUN pip install -r requirements.txt
 
